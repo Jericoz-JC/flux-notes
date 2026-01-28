@@ -36,7 +36,9 @@ function createWindow() {
 
   // Load the app
   if (isDev) {
-    mainWindow.loadURL('http://localhost:5173')
+    // vite-plugin-electron sets VITE_DEV_SERVER_URL
+    const devUrl = process.env.VITE_DEV_SERVER_URL || 'http://localhost:5173'
+    mainWindow.loadURL(devUrl)
     mainWindow.webContents.openDevTools()
   } else {
     mainWindow.loadFile(join(__dirname, '../dist/index.html'))

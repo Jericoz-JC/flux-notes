@@ -1,206 +1,289 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+/* ============================================
+   FLUX Notes Design System
+   Minimal • Fast • Focused
+   ============================================ */
 
-/* Custom CSS variables for Zinc theme */
-@theme {
-  --color-background: oklch(0.145 0.000 0);
-  --color-foreground: oklch(0.985 0.000 0);
-  --color-card: oklch(0.145 0.000 0);
-  --color-card-foreground: oklch(0.985 0.000 0);
-  --color-popover: oklch(0.145 0.000 0);
-  --color-popover-foreground: oklch(0.985 0.000 0);
-  --color-primary: oklch(0.985 0.000 0);
-  --color-primary-foreground: oklch(0.205 0.000 0);
-  --color-secondary: oklch(0.269 0.006 286);
-  --color-secondary-foreground: oklch(0.985 0.000 0);
-  --color-muted: oklch(0.269 0.006 286);
-  --color-muted-foreground: oklch(0.708 0.014 286);
-  --color-accent: oklch(0.269 0.006 286);
-  --color-accent-foreground: oklch(0.985 0.000 0);
-  --color-destructive: oklch(0.396 0.141 25);
-  --color-destructive-foreground: oklch(0.985 0.000 0);
-  --color-border: oklch(0.269 0.006 286);
-  --color-input: oklch(0.269 0.006 286);
-  --color-ring: oklch(0.871 0.006 286);
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
+@theme inline {
+  /* Spacing (4px grid) */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  /* Transitions */
+  --duration-fast: 100ms;
+  --duration-normal: 150ms;
+
+  /* Shadows - minimal, only when needed */
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.1);
+  --shadow-md: 0 2px 8px oklch(0 0 0 / 0.15);
 }
 
-/* Base styles */
-* {
+/* ============================================
+   Dark Theme (Default)
+   ============================================ */
+:root {
+  color-scheme: dark;
+
+  /* Surfaces - NOT pure black */
+  --bg-base: oklch(0.13 0.004 285);
+  --bg-elevated: oklch(0.16 0.004 285);
+  --bg-surface: oklch(0.19 0.004 285);
+  --bg-overlay: oklch(0.22 0.004 285);
+
+  /* Text - NOT pure white */
+  --text-primary: oklch(0.93 0.004 285);
+  --text-secondary: oklch(0.60 0.008 285);
+  --text-tertiary: oklch(0.45 0.008 285);
+
+  /* Borders */
+  --border-subtle: oklch(0.22 0.006 285);
+  --border-default: oklch(0.26 0.006 285);
+  --border-strong: oklch(0.32 0.006 285);
+
+  /* Accent - soft blue, use sparingly */
+  --accent: oklch(0.65 0.14 250);
+  --accent-hover: oklch(0.70 0.14 250);
+  --accent-muted: oklch(0.65 0.14 250 / 0.12);
+
+  /* Semantic */
+  --success: oklch(0.65 0.15 145);
+  --warning: oklch(0.75 0.12 85);
+  --error: oklch(0.60 0.18 25);
+
+  /* Sidebar */
+  --sidebar-width: 240px;
+
+  /* shadcn compatibility */
+  --background: var(--bg-base);
+  --foreground: var(--text-primary);
+  --card: var(--bg-elevated);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-elevated);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--accent);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: var(--bg-surface);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--bg-surface);
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--bg-surface);
+  --accent-foreground: var(--text-primary);
+  --destructive: var(--error);
+  --destructive-foreground: oklch(1 0 0);
+  --border: var(--border-subtle);
+  --input: var(--border-default);
+  --ring: var(--accent);
+  --radius: 6px;
+}
+
+/* ============================================
+   Light Theme
+   ============================================ */
+.light {
+  color-scheme: light;
+
+  --bg-base: oklch(0.985 0.002 285);
+  --bg-elevated: oklch(1.0 0 0);
+  --bg-surface: oklch(0.96 0.002 285);
+  --bg-overlay: oklch(0.93 0.002 285);
+
+  --text-primary: oklch(0.15 0.01 285);
+  --text-secondary: oklch(0.45 0.01 285);
+  --text-tertiary: oklch(0.60 0.01 285);
+
+  --border-subtle: oklch(0.90 0.004 285);
+  --border-default: oklch(0.85 0.004 285);
+  --border-strong: oklch(0.75 0.004 285);
+
+  --accent: oklch(0.55 0.18 250);
+  --accent-hover: oklch(0.50 0.18 250);
+  --accent-muted: oklch(0.55 0.18 250 / 0.10);
+}
+
+/* ============================================
+   Base Styles
+   ============================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  line-height: 1.5;
+  overflow: hidden;
 }
 
-/* Custom scrollbar for Zinc theme */
+/* ============================================
+   Typography
+   ============================================ */
+.text-display {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.text-title {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.text-body {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.text-small {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.text-caption {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.text-micro {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+/* ============================================
+   Scrollbar
+   ============================================ */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: oklch(0.145 0.000 0);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: oklch(0.35 0.006 286);
+  background: var(--border-default);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.45 0.006 286);
+  background: var(--border-strong);
 }
 
-/* Focus styles for accessibility */
+/* ============================================
+   Focus States
+   ============================================ */
+:focus {
+  outline: none;
+}
+
 :focus-visible {
-  outline: 2px solid var(--color-ring);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
-/* Selection styling */
+/* ============================================
+   Selection
+   ============================================ */
 ::selection {
-  background-color: oklch(0.985 0.000 0 / 0.2);
+  background-color: var(--accent-muted);
 }
 
-/* Prevent text selection on drag operations */
+/* ============================================
+   App-specific utilities
+   ============================================ */
+
+/* Drag region for title bar */
+.drag-region {
+  -webkit-app-region: drag;
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* Prevent text selection during drag */
 .no-select {
   user-select: none;
 }
 
-/* Smooth transitions */
-.transition-colors {
-  transition-property: color, background-color, border-color;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+/* Truncate text with ellipsis */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+/* Sidebar item */
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  transition: all 100ms ease-out;
+  cursor: pointer;
 }
 
-:root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+.sidebar-item:hover {
+  background: var(--bg-surface);
+  color: var(--text-primary);
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+.sidebar-item.active {
+  background: var(--accent-muted);
+  color: var(--text-primary);
 }
 
+.sidebar-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 2px;
+  height: 20px;
+  background: var(--accent);
+  border-radius: 0 2px 2px 0;
+}
+
+/* ============================================
+   Tailwind Layer Overrides
+   ============================================ */
 @layer base {
   * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
+    border-color: var(--border-subtle);
   }
 }
