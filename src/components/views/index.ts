@@ -1,3 +1,4 @@
+export { DashboardView } from './DashboardView'
 export { NotesView } from './NotesView'
 export { TasksView } from './TasksView'
 export { FocusView } from './FocusView'

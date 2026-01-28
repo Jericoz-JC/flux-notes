@@ -5,64 +5,88 @@ import {
   RiMindMap,
   RiSearchLine,
   RiAddLine,
-  RiSettings4Line
+  RiSettings4Line,
+  RiHome5Line,
+  RiSidebarFoldLine,
+  RiKeyboardBoxLine
 } from '@remixicon/react'
-
-type NavItem = 'notes' | 'tasks' | 'focus' | 'graph'
+import type { NavItem } from './AppShell'
 
 interface SidebarProps {
   activeNav: NavItem
   onNavChange: (nav: NavItem) => void
+  onToggleCollapse: () => void
+  onOpenCommandPalette: () => void
+  onOpenSettings: () => void
 }
 
-export function Sidebar({ activeNav, onNavChange }: SidebarProps) {
+export function Sidebar({ activeNav, onNavChange, onToggleCollapse, onOpenCommandPalette, onOpenSettings }: SidebarProps) {
   return (
-    <aside className="w-60 h-full flex flex-col border-r border-[var(--border-subtle)] bg-[var(--bg-base)]">
+    <aside className="w-full h-full flex flex-col bg-[var(--bg-base)] border-r border-[var(--border-subtle)]">
       {/* Logo area */}
-      <div className="h-12 flex items-center px-4 drag-region">
+      <div className="h-12 flex items-center justify-between px-3 drag-region">
         <div className="flex items-center gap-2 no-drag">
-          <div className="w-6 h-6 rounded-md bg-[var(--accent)] flex items-center justify-center">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[var(--accent)] to-purple-500 flex items-center justify-center shadow-lg shadow-[var(--accent)]/20">
             <span className="text-white text-xs font-bold">F</span>
           </div>
-          <span className="text-sm font-semibold">FLUX Notes</span>
+          <span className="text-sm font-semibold text-[var(--text-primary)]">FLUX</span>
         </div>
+        <button
+          onClick={onToggleCollapse}
+          className="no-drag w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] transition-all duration-150"
+        >
+          <RiSidebarFoldLine className="w-4 h-4" />
+        </button>
       </div>
 
       {/* Search */}
       <div className="px-3 mb-2">
-        <button className="w-full h-8 flex items-center gap-2 px-3 text-sm text-[var(--text-tertiary)] bg-[var(--bg-surface)] rounded-md border border-[var(--border-subtle)] hover:border-[var(--border-default)] transition-colors">
+        <button
+          onClick={onOpenCommandPalette}
+          className="w-full h-9 flex items-center gap-2 px-3 text-sm text-[var(--text-tertiary)] bg-[var(--bg-surface)] rounded-lg border border-[var(--border-subtle)] hover:border-[var(--border-default)] hover:text-[var(--text-secondary)] transition-all duration-150"
+        >
           <RiSearchLine className="w-4 h-4" />
           <span>Search</span>
-          <kbd className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-overlay)] text-[var(--text-tertiary)]">
-            ⌘K
-          </kbd>
+          <div className="ml-auto flex items-center gap-0.5">
+            <kbd className="text-[10px] px-1 py-0.5 rounded bg-[var(--bg-overlay)] text-[var(--text-tertiary)]">⌘</kbd>
+            <kbd className="text-[10px] px-1 py-0.5 rounded bg-[var(--bg-overlay)] text-[var(--text-tertiary)]">K</kbd>
+          </div>
         </button>
       </div>
 
       {/* Quick Actions */}
       <div className="px-3 mb-4">
-        <button className="w-full h-8 flex items-center gap-2 px-3 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] rounded-md transition-colors">
-          <RiAddLine className="w-4 h-4" />
+        <button className="w-full h-9 flex items-center gap-2 px-3 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] rounded-lg transition-all duration-150 group">
+          <RiAddLine className="w-4 h-4 group-hover:text-[var(--accent)] transition-colors" />
           <span>New Note</span>
-          <kbd className="ml-auto text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-surface)] text-[var(--text-tertiary)]">
-            ⌘N
-          </kbd>
+          <div className="ml-auto flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+            <kbd className="text-[10px] px-1 py-0.5 rounded bg-[var(--bg-surface)] text-[var(--text-tertiary)]">⌘</kbd>
+            <kbd className="text-[10px] px-1 py-0.5 rounded bg-[var(--bg-surface)] text-[var(--text-tertiary)]">N</kbd>
+          </div>
         </button>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 px-3 space-y-1">
         <NavButton
+          icon={<RiHome5Line className="w-4 h-4" />}
+          label="Home"
+          active={activeNav === 'home'}
+          onClick={() => onNavChange('home')}
+        />
+        <NavButton
           icon={<RiFileTextLine className="w-4 h-4" />}
           label="Notes"
           active={activeNav === 'notes'}
           onClick={() => onNavChange('notes')}
+          badge={12}
         />
         <NavButton
           icon={<RiCheckboxCircleLine className="w-4 h-4" />}
           label="Tasks"
           active={activeNav === 'tasks'}
           onClick={() => onNavChange('tasks')}
+          badge={3}
         />
         <NavButton
           icon={<RiTimerLine className="w-4 h-4" />}
@@ -79,8 +103,15 @@ export function Sidebar({ activeNav, onNavChange }: SidebarProps) {
       </nav>
 
       {/* Bottom section */}
-      <div className="px-3 py-3 border-t border-[var(--border-subtle)]">
-        <button className="w-full h-8 flex items-center gap-2 px-3 text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] rounded-md transition-colors">
+      <div className="px-3 py-3 border-t border-[var(--border-subtle)] space-y-1">
+        <button className="w-full h-9 flex items-center gap-2 px-3 text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] rounded-lg transition-all duration-150">
+          <RiKeyboardBoxLine className="w-4 h-4" />
+          <span>Shortcuts</span>
+        </button>
+        <button
+          onClick={onOpenSettings}
+          className="w-full h-9 flex items-center gap-2 px-3 text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] rounded-lg transition-all duration-150"
+        >
           <RiSettings4Line className="w-4 h-4" />
           <span>Settings</span>
         </button>
@@ -93,29 +124,52 @@ function NavButton({
   icon,
   label,
   active,
-  onClick
+  onClick,
+  badge
 }: {
   icon: React.ReactNode
   label: string
   active: boolean
   onClick: () => void
+  badge?: number
 }) {
   return (
     <button
       onClick={onClick}
       className={`
-        relative w-full h-9 flex items-center gap-2 px-3 text-sm rounded-md transition-colors
+        relative w-full h-9 flex items-center gap-2 px-3 text-sm rounded-lg
+        transition-all duration-150 group
         ${active
           ? 'bg-[var(--accent-muted)] text-[var(--text-primary)]'
           : 'text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)]'
         }
       `}
     >
+      {/* Active indicator */}
       {active && (
         <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-[var(--accent)] rounded-r" />
       )}
-      {icon}
-      <span>{label}</span>
+
+      {/* Icon */}
+      <span className={`transition-colors duration-150 ${active ? 'text-[var(--accent)]' : 'text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)]'}`}>
+        {icon}
+      </span>
+
+      {/* Label */}
+      <span className="flex-1 text-left">{label}</span>
+
+      {/* Badge */}
+      {badge !== undefined && badge > 0 && (
+        <span className={`
+          text-[10px] font-medium px-1.5 py-0.5 rounded-full
+          ${active
+            ? 'bg-[var(--accent)] text-white'
+            : 'bg-[var(--bg-surface)] text-[var(--text-tertiary)]'
+          }
+        `}>
+          {badge}
+        </span>
+      )}
     </button>
   )
 }
