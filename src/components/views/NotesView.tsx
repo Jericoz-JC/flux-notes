@@ -27,9 +27,9 @@ export function NotesView({ onOpenNote }: NotesViewProps) {
   return (
     <div className="h-full flex">
       {/* Notes List */}
-      <div className="w-72 h-full border-r border-[var(--border-subtle)] flex flex-col bg-[var(--bg-base)]">
+      <div className="w-64 lg:w-72 h-full border-r border-[var(--border-subtle)] flex flex-col bg-[var(--bg-base)] flex-shrink-0">
         {/* List Header */}
-        <div className="h-12 flex items-center justify-between px-4 border-b border-[var(--border-subtle)]">
+        <div className="h-12 flex items-center justify-between px-3 border-b border-[var(--border-subtle)]">
           <span className="text-sm font-medium text-[var(--text-primary)]">Notes</span>
           <div className="flex items-center gap-1">
             <button className="w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] transition-all duration-150">
@@ -43,20 +43,20 @@ export function NotesView({ onOpenNote }: NotesViewProps) {
 
         {/* Search */}
         <div className="p-2 border-b border-[var(--border-subtle)]">
-          <div className="flex items-center gap-2 px-2 py-1.5 bg-[var(--bg-surface)] rounded-md border border-transparent focus-within:border-[var(--accent)] transition-colors">
-            <RiSearchLine className="w-3.5 h-3.5 text-[var(--text-tertiary)]" />
+          <div className="flex items-center gap-2 px-2.5 py-1.5 bg-[var(--bg-surface)] rounded-lg border border-transparent focus-within:border-[var(--accent)] transition-colors">
+            <RiSearchLine className="w-3.5 h-3.5 text-[var(--text-tertiary)] flex-shrink-0" />
             <input
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Filter notes..."
-              className="flex-1 bg-transparent text-sm text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] outline-none"
+              className="flex-1 bg-transparent text-sm text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] outline-none min-w-0"
             />
           </div>
         </div>
 
         {/* Notes List */}
-        <div className="flex-1 overflow-y-auto py-2 px-2">
+        <div className="flex-1 overflow-y-auto p-2">
           {filteredNotes.map(note => (
             <NoteListItem
               key={note.id}
@@ -74,32 +74,34 @@ export function NotesView({ onOpenNote }: NotesViewProps) {
         </div>
 
         {/* List Footer */}
-        <div className="px-4 py-2 border-t border-[var(--border-subtle)]">
+        <div className="px-3 py-2 border-t border-[var(--border-subtle)]">
           <span className="text-xs text-[var(--text-tertiary)]">{filteredNotes.length} notes</span>
         </div>
       </div>
 
       {/* Note Editor Area */}
-      <div className="flex-1 flex flex-col bg-[var(--bg-elevated)]">
+      <div className="flex-1 flex flex-col bg-[var(--bg-elevated)] min-w-0">
         {activeNote ? (
           <>
             {/* Editor Header */}
-            <div className="h-12 flex items-center justify-between px-6 border-b border-[var(--border-subtle)]">
-              <div className="flex items-center gap-3">
+            <div className="h-12 flex items-center justify-between px-4 lg:px-6 border-b border-[var(--border-subtle)] gap-3">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
                 <input
                   type="text"
                   defaultValue={activeNote.title}
-                  className="text-lg font-semibold bg-transparent border-none outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]"
+                  className="text-base lg:text-lg font-semibold bg-transparent border-none outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] min-w-0 flex-1"
                   placeholder="Untitled"
                 />
-                {activeNote.tags.map(tag => (
-                  <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-[var(--bg-surface)] text-[var(--text-tertiary)]">
-                    #{tag}
-                  </span>
-                ))}
+                <div className="hidden sm:flex items-center gap-1.5 flex-shrink-0">
+                  {activeNote.tags.map(tag => (
+                    <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-[var(--bg-surface)] text-[var(--text-tertiary)]">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <span className="text-xs text-[var(--text-tertiary)] mr-2">Edited {activeNote.date}</span>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <span className="text-xs text-[var(--text-tertiary)] hidden sm:block">Edited {activeNote.date}</span>
                 <button className="w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] transition-all duration-150">
                   <RiMoreLine className="w-4 h-4" />
                 </button>
@@ -107,18 +109,18 @@ export function NotesView({ onOpenNote }: NotesViewProps) {
             </div>
 
             {/* Editor Content */}
-            <div className="flex-1 overflow-y-auto p-6">
+            <div className="flex-1 overflow-y-auto p-4 lg:p-6">
               <div className="max-w-2xl mx-auto">
-                <div className="prose prose-invert prose-sm">
+                <div className="space-y-4">
                   <p className="text-[var(--text-secondary)] leading-relaxed">
                     {activeNote.preview}
                   </p>
-                  <p className="text-[var(--text-secondary)] leading-relaxed mt-4">
-                    Use <code className="text-[var(--accent)] bg-[var(--bg-surface)] px-1.5 py-0.5 rounded text-xs">[[wiki links]]</code> to connect your notes,
-                    and <code className="text-[var(--accent)] bg-[var(--bg-surface)] px-1.5 py-0.5 rounded text-xs">#tags</code> to organize them.
+                  <p className="text-[var(--text-secondary)] leading-relaxed">
+                    Use <code className="text-[var(--accent)] bg-[var(--bg-surface)] px-1.5 py-0.5 rounded text-xs font-mono">[[wiki links]]</code> to connect your notes,
+                    and <code className="text-[var(--accent)] bg-[var(--bg-surface)] px-1.5 py-0.5 rounded text-xs font-mono">#tags</code> to organize them.
                   </p>
-                  <p className="text-[var(--text-secondary)] leading-relaxed mt-4">
-                    Press <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-surface)] text-[var(--text-tertiary)] border border-[var(--border-subtle)]">⌘K</kbd> to open the command palette and quickly navigate anywhere.
+                  <p className="text-[var(--text-secondary)] leading-relaxed">
+                    Press <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-surface)] text-[var(--text-tertiary)] border border-[var(--border-subtle)] font-mono">Ctrl+K</kbd> to open the command palette and quickly navigate anywhere.
                   </p>
                 </div>
               </div>
@@ -156,7 +158,7 @@ function NoteListItem({
     <button
       onClick={onClick}
       className={`
-        relative w-full text-left p-3 rounded-lg mb-1
+        relative w-full text-left p-2.5 rounded-lg mb-0.5
         transition-all duration-150 group
         ${active
           ? 'bg-[var(--accent-muted)]'
@@ -178,12 +180,12 @@ function NoteListItem({
       </div>
 
       {/* Preview */}
-      <p className="text-xs text-[var(--text-tertiary)] truncate pl-5.5 mb-1">
+      <p className="text-xs text-[var(--text-tertiary)] truncate ml-5.5 mb-1">
         {preview}
       </p>
 
       {/* Meta row */}
-      <div className="flex items-center gap-2 pl-5.5">
+      <div className="flex items-center gap-1.5 ml-5.5">
         <span className="text-[10px] text-[var(--text-tertiary)]">{date}</span>
         {tags.slice(0, 2).map(tag => (
           <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-surface)] text-[var(--text-tertiary)]">

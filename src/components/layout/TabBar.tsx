@@ -37,19 +37,19 @@ export function TabBar({
   onToggleSidebar
 }: TabBarProps) {
   return (
-    <div className="h-10 flex items-center bg-[var(--bg-base)] border-b border-[var(--border-subtle)] drag-region">
+    <div className="h-10 flex items-center bg-[var(--bg-base)] border-b border-[var(--border-subtle)]">
       {/* Sidebar toggle (when collapsed) */}
       {sidebarCollapsed && (
         <button
           onClick={onToggleSidebar}
-          className="no-drag h-10 w-10 flex items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] transition-colors"
+          className="h-10 w-10 flex items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] transition-colors flex-shrink-0"
         >
           <RiMenuLine className="w-4 h-4" />
         </button>
       )}
 
       {/* Tabs */}
-      <div className="flex-1 flex items-center h-full overflow-x-auto no-scrollbar no-drag">
+      <div className="flex-1 flex items-center h-full overflow-x-auto no-scrollbar">
         {tabs.map(tab => (
           <TabItem
             key={tab.id}
@@ -64,14 +64,14 @@ export function TabBar({
         {/* New tab button */}
         <button
           onClick={onNewTab}
-          className="h-8 w-8 flex items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] rounded-md mx-1 transition-all duration-150 active:scale-95"
+          className="h-8 w-8 flex items-center justify-center text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] rounded-md mx-1 transition-all duration-150 active:scale-95 flex-shrink-0"
         >
           <RiAddLine className="w-4 h-4" />
         </button>
       </div>
 
-      {/* Window controls spacer (macOS) */}
-      <div className="w-20 drag-region" />
+      {/* Window controls spacer (for dragging) */}
+      <div className="w-4 h-full drag-region flex-shrink-0" />
     </div>
   )
 }
@@ -94,14 +94,14 @@ function TabItem({
       onClick={onSelect}
       className={`
         group relative h-full flex items-center gap-2 px-3 cursor-pointer
-        border-r border-[var(--border-subtle)]
+        border-r border-[var(--border-subtle)] min-w-0
         transition-all duration-150
         ${isActive
           ? 'bg-[var(--bg-elevated)] text-[var(--text-primary)]'
           : 'bg-[var(--bg-base)] text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)]'
         }
       `}
-      style={{ minWidth: 120, maxWidth: 200 }}
+      style={{ minWidth: 100, maxWidth: 180 }}
     >
       {/* Active indicator */}
       {isActive && (
@@ -109,18 +109,18 @@ function TabItem({
       )}
 
       {/* Icon */}
-      <span className={isActive ? 'text-[var(--accent)]' : 'text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)]'}>
+      <span className={`flex-shrink-0 ${isActive ? 'text-[var(--accent)]' : 'text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)]'}`}>
         {tabIcons[tab.type]}
       </span>
 
       {/* Title */}
-      <span className="flex-1 text-xs font-medium truncate">
+      <span className="flex-1 text-xs font-medium truncate min-w-0">
         {tab.title}
       </span>
 
       {/* Dirty indicator */}
       {tab.isDirty && (
-        <div className="w-2 h-2 rounded-full bg-[var(--accent)]" />
+        <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] flex-shrink-0" />
       )}
 
       {/* Close button */}
@@ -131,7 +131,7 @@ function TabItem({
             onClose()
           }}
           className={`
-            w-5 h-5 flex items-center justify-center rounded
+            w-5 h-5 flex items-center justify-center rounded flex-shrink-0
             opacity-0 group-hover:opacity-100
             text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-overlay)]
             transition-all duration-150 active:scale-90

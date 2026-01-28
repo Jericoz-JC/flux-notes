@@ -10,6 +10,7 @@ import {
   RiSidebarFoldLine,
   RiKeyboardBoxLine
 } from '@remixicon/react'
+import { getModKey } from '@/lib/platform'
 import type { NavItem } from './AppShell'
 
 interface SidebarProps {
@@ -21,11 +22,13 @@ interface SidebarProps {
 }
 
 export function Sidebar({ activeNav, onNavChange, onToggleCollapse, onOpenCommandPalette, onOpenSettings }: SidebarProps) {
+  const mod = getModKey()
+
   return (
-    <aside className="w-full h-full flex flex-col bg-[var(--bg-base)] border-r border-[var(--border-subtle)]">
+    <aside className="w-full h-full flex flex-col bg-[var(--bg-base)]">
       {/* Logo area */}
-      <div className="h-12 flex items-center justify-between px-3 drag-region">
-        <div className="flex items-center gap-2 no-drag">
+      <div className="h-12 flex items-center justify-between px-3 border-b border-[var(--border-subtle)] drag-region">
+        <div className="flex items-center gap-2.5 no-drag">
           <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[var(--accent)] to-purple-500 flex items-center justify-center shadow-lg shadow-[var(--accent)]/20">
             <span className="text-white text-xs font-bold">F</span>
           </div>
@@ -34,40 +37,42 @@ export function Sidebar({ activeNav, onNavChange, onToggleCollapse, onOpenComman
         <button
           onClick={onToggleCollapse}
           className="no-drag w-7 h-7 flex items-center justify-center rounded-md text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] transition-all duration-150"
+          title={`Toggle sidebar (${mod}+\\)`}
         >
           <RiSidebarFoldLine className="w-4 h-4" />
         </button>
       </div>
 
       {/* Search */}
-      <div className="px-3 mb-2">
+      <div className="p-3">
         <button
           onClick={onOpenCommandPalette}
-          className="w-full h-9 flex items-center gap-2 px-3 text-sm text-[var(--text-tertiary)] bg-[var(--bg-surface)] rounded-lg border border-[var(--border-subtle)] hover:border-[var(--border-default)] hover:text-[var(--text-secondary)] transition-all duration-150"
+          className="w-full h-9 flex items-center gap-2.5 px-3 text-sm text-[var(--text-tertiary)] bg-[var(--bg-surface)] rounded-lg border border-[var(--border-subtle)] hover:border-[var(--border-default)] hover:text-[var(--text-secondary)] transition-all duration-150"
         >
-          <RiSearchLine className="w-4 h-4" />
-          <span>Search</span>
-          <div className="ml-auto flex items-center gap-0.5">
-            <kbd className="text-[10px] px-1 py-0.5 rounded bg-[var(--bg-overlay)] text-[var(--text-tertiary)]">⌘</kbd>
-            <kbd className="text-[10px] px-1 py-0.5 rounded bg-[var(--bg-overlay)] text-[var(--text-tertiary)]">K</kbd>
-          </div>
+          <RiSearchLine className="w-4 h-4 flex-shrink-0" />
+          <span className="flex-1 text-left">Search</span>
+          <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-overlay)] text-[var(--text-tertiary)] font-mono">
+            {mod}+K
+          </kbd>
         </button>
       </div>
 
       {/* Quick Actions */}
-      <div className="px-3 mb-4">
-        <button className="w-full h-9 flex items-center gap-2 px-3 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] rounded-lg transition-all duration-150 group">
-          <RiAddLine className="w-4 h-4 group-hover:text-[var(--accent)] transition-colors" />
-          <span>New Note</span>
-          <div className="ml-auto flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-            <kbd className="text-[10px] px-1 py-0.5 rounded bg-[var(--bg-surface)] text-[var(--text-tertiary)]">⌘</kbd>
-            <kbd className="text-[10px] px-1 py-0.5 rounded bg-[var(--bg-surface)] text-[var(--text-tertiary)]">N</kbd>
-          </div>
+      <div className="px-3 pb-3">
+        <button className="w-full h-9 flex items-center gap-2.5 px-3 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] rounded-lg transition-all duration-150 group">
+          <RiAddLine className="w-4 h-4 flex-shrink-0 group-hover:text-[var(--accent)] transition-colors" />
+          <span className="flex-1 text-left">New Note</span>
+          <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-surface)] text-[var(--text-tertiary)] font-mono opacity-0 group-hover:opacity-100 transition-opacity">
+            {mod}+N
+          </kbd>
         </button>
       </div>
 
+      {/* Divider */}
+      <div className="mx-3 h-px bg-[var(--border-subtle)]" />
+
       {/* Navigation */}
-      <nav className="flex-1 px-3 space-y-1">
+      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
         <NavButton
           icon={<RiHome5Line className="w-4 h-4" />}
           label="Home"
@@ -103,16 +108,16 @@ export function Sidebar({ activeNav, onNavChange, onToggleCollapse, onOpenComman
       </nav>
 
       {/* Bottom section */}
-      <div className="px-3 py-3 border-t border-[var(--border-subtle)] space-y-1">
-        <button className="w-full h-9 flex items-center gap-2 px-3 text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] rounded-lg transition-all duration-150">
-          <RiKeyboardBoxLine className="w-4 h-4" />
+      <div className="p-3 border-t border-[var(--border-subtle)] space-y-1">
+        <button className="w-full h-9 flex items-center gap-2.5 px-3 text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] rounded-lg transition-all duration-150">
+          <RiKeyboardBoxLine className="w-4 h-4 flex-shrink-0" />
           <span>Shortcuts</span>
         </button>
         <button
           onClick={onOpenSettings}
-          className="w-full h-9 flex items-center gap-2 px-3 text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] rounded-lg transition-all duration-150"
+          className="w-full h-9 flex items-center gap-2.5 px-3 text-sm text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] rounded-lg transition-all duration-150"
         >
-          <RiSettings4Line className="w-4 h-4" />
+          <RiSettings4Line className="w-4 h-4 flex-shrink-0" />
           <span>Settings</span>
         </button>
       </div>
@@ -137,7 +142,7 @@ function NavButton({
     <button
       onClick={onClick}
       className={`
-        relative w-full h-9 flex items-center gap-2 px-3 text-sm rounded-lg
+        relative w-full h-9 flex items-center gap-2.5 px-3 text-sm rounded-lg
         transition-all duration-150 group
         ${active
           ? 'bg-[var(--accent-muted)] text-[var(--text-primary)]'
@@ -151,17 +156,17 @@ function NavButton({
       )}
 
       {/* Icon */}
-      <span className={`transition-colors duration-150 ${active ? 'text-[var(--accent)]' : 'text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)]'}`}>
+      <span className={`flex-shrink-0 transition-colors duration-150 ${active ? 'text-[var(--accent)]' : 'text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)]'}`}>
         {icon}
       </span>
 
       {/* Label */}
-      <span className="flex-1 text-left">{label}</span>
+      <span className="flex-1 text-left truncate">{label}</span>
 
       {/* Badge */}
       {badge !== undefined && badge > 0 && (
         <span className={`
-          text-[10px] font-medium px-1.5 py-0.5 rounded-full
+          flex-shrink-0 text-[10px] font-medium min-w-[18px] h-[18px] flex items-center justify-center rounded-full
           ${active
             ? 'bg-[var(--accent)] text-white'
             : 'bg-[var(--bg-surface)] text-[var(--text-tertiary)]'
