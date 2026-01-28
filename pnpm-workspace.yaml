@@ -1,0 +1,6 @@
+onlyBuiltDependencies:
+  - electron
+  - electron-winstaller
+  - esbuild
+  - better-sqlite3
+  - lzma-native
